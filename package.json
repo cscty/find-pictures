@@ -1,0 +1,80 @@
+{
+  "name": "find-pictures",
+  "displayName": "find-pictures",
+  "description": "This plugin solves the problem of duplicate images in the project",
+  "publisher": "cscty",
+  "version": "1.0.1",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "icon": "images/icon.png",
+  "repository": "https://github.com/cscty/find-pictures",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "find-pictures.find",
+        "title": "查找相似图片"
+      },
+      {
+        "command": "find-pictures.findSames",
+        "title": "枚举相似图片集合"
+      }
+    ],
+    "configuration": {
+      "title": "find-pictures",
+      "properties": {
+        "find-pictures.similarity": {
+          "type": "number",
+          "description": "匹配相似度",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1
+        },
+        "find-pictures.includeDirs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "包含目录(includeDirs)",
+          "default": [
+            "**/"
+          ]
+        },
+        "find-pictures.excludeDirs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "排除目录(excludeDirs)",
+          "default": [
+            "**/node_modules/"
+          ]
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "@types/vscode": "^1.0.0",
+    "canvas": "^3.2.0",
+    "electron": "^34.5.8",
+    "electron-rebuild": "^3.2.9",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "image-js": "^0.37.0"
+  }
+}
