@@ -5,12 +5,7 @@ const CONFIG = {
   COLOR_TOLERANCE: 3,
 };
 
-export const compareImageJS = async (
-  imagePath1: string,
-  imagePath2: string
-) => {
-  let img1 = await Image.load(imagePath1);
-  let img2 = await Image.load(imagePath2);
+export const compareImageJS = async (img1: Image, img2: Image) => {
   if (img1.width !== img2.width || img1.height !== img2.height)
     return {
       success: false,

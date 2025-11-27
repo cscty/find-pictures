@@ -3,7 +3,7 @@
   "displayName": "find-pictures",
   "description": "解决了项目中重复图片导致的性能问题",
   "publisher": "cscty",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "engines": {
     "vscode": "^1.0.0"
   },

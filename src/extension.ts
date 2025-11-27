@@ -145,12 +145,12 @@ async function findSimilarImages(
   return similarImages;
 }
 
-async function compareImages(imagePath1: string, imagePath2: string) {
+async function compareImages(imagePath: string, referencePath: string) {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await workerPool!.execute({
-        imagePath1,
-        imagePath2,
+        imagePath,
+        referencePath,
       });
       resolve(result);
     } catch (error) {
