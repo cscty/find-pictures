@@ -1,9 +1,9 @@
 {
   "name": "find-pictures",
   "displayName": "find-pictures",
-  "description": "This plugin solves the problem of duplicate images in the project",
+  "description": "解决了项目中重复图片导致的性能问题",
   "publisher": "cscty",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "engines": {
     "vscode": "^1.0.0"
   },
@@ -17,12 +17,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "find-pictures.find",
+        "command": "find-pictures.find-pictures",
         "title": "查找相似图片"
       },
       {
-        "command": "find-pictures.findSames",
-        "title": "枚举相似图片集合"
+        "command": "find-pictures.calculate-image-size",
+        "title": "计算项目图片大小"
       }
     ],
     "configuration": {

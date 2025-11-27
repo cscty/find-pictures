@@ -1,14 +1,15 @@
 import * as vscode from "vscode";
 import { imageExtensions } from "./const";
 import { WorkerPool } from "./utils";
+import fs from "fs/promises";
 import path from "path";
 let workerPool: WorkerPool | undefined = new WorkerPool(
   path.join(__dirname, "./workers/image-worker")
 );
 
 export function activate(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand(
-    "find-pictures.find",
+  const findPictures = vscode.commands.registerCommand(
+    "find-pictures.find-pictures",
     async () => {
       try {
         // 1. 选择参考图片
@@ -41,7 +42,28 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  const calculateImageSize = vscode.commands.registerCommand(
+    "find-pictures.calculate-image-size",
+    async () => {
+      try {
+        const allImages = await scanWorkspaceImages();
+        let size = 0;
+        for (let i = 0; i < allImages.length; i++) {
+          const fileStats = await fs.stat(allImages[i]);
+          size += fileStats.size;
+        }
+        vscode.window.showInformationMessage(
+          `项目共有${allImages.length}张图片，大小为${size}B = ${(
+            size / 1024
+          ).toFixed(2)}KB = ${(size / 1024 / 1024).toFixed(2)}M`
+        );
+      } catch (error: any) {
+        vscode.window.showErrorMessage(`操作失败: ${error.message}`);
+      }
+    }
+  );
+
+  context.subscriptions.push(findPictures, calculateImageSize);
 }
 
 async function scanWorkspaceImages() {
@@ -73,7 +95,7 @@ async function selectReferenceImage() {
     canSelectMany: false,
     openLabel: "选择参考图片",
     filters: {
-      图片文件: imageExtensions,
+      images: imageExtensions,
     },
   };
 
