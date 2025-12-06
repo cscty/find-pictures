@@ -7,34 +7,40 @@ export class WorkerPool {
 
   constructor(workerPath: string, poolSize = 10, options?: WorkerOptions) {
     // 初始化 Worker 池
-    for (let i = 0; i < poolSize; i++) {
-      const worker = new Worker(workerPath, options);
-      worker.on(
-        "message",
-        ({
-          data,
-          error,
-          workerId,
-        }: {
-          data?: any;
-          error?: any;
-          workerId: number;
-        }) => {
-          if (error) {
-            this.map.get(workerId)?.reject(error);
-          } else {
-            this.map.get(workerId)?.resolve(data);
+    console.log("没纸小");
+    try {
+      for (let i = 0; i < poolSize; i++) {
+        console.log("没有new Worker的感觉", workerPath);
+        const worker = new Worker(workerPath, options);
+        worker.on(
+          "message",
+          ({
+            data,
+            error,
+            workerId,
+          }: {
+            data?: any;
+            error?: any;
+            workerId: number;
+          }) => {
+            if (error) {
+              this.map.get(workerId)?.reject(error);
+            } else {
+              this.map.get(workerId)?.resolve(data);
+            }
+            this.map.delete(workerId);
+            // 处理结果并释放 Worker
+            if (this.queue.length > 0) {
+              this.queue.shift()?.();
+            }
+            this.workers.push(worker);
           }
-          this.map.delete(workerId);
-          // 处理结果并释放 Worker
-          if (this.queue.length > 0) {
-            this.queue.shift()?.();
-          }
-          this.workers.push(worker);
-        }
-      );
+        );
 
-      this.workers.push(worker);
+        this.workers.push(worker);
+      }
+    } catch (error) {
+      console.log("worker初始化问题", error);
     }
   }
 
@@ -52,6 +58,7 @@ export class WorkerPool {
         resolve,
         reject,
       });
+      console.log("有post吗？");
       worker.postMessage({
         workerId,
         data,

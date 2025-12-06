@@ -13,6 +13,7 @@ const extensionConfig = {
   mode: "none", // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
   entry: {
     extension: "./src/extension.ts",
+    "workers/find-pictures-worker": "./src/workers/find-pictures-worker.ts",
     "workers/image-worker": "./src/workers/image-worker.ts",
   },
   output: {
