@@ -1,18 +1,14 @@
 import path from "path";
 import * as vscode from "vscode";
-import {
-  scanWorkspaceImages,
-  selectReferenceImage,
-  WorkerPool,
-} from "../utils";
-// import { imageDimensionsMap } from "../extension";
-let imageDimensionsMap: { [key: string]: string } = {};
+import { WorkerPool } from "../utils";
+import { imageDimensionsMap } from "../extension";
+import { selectReferenceImage } from "../utils/selectReferenceImage";
+import { scanWorkspaceImages } from "../utils/scanWorkspaceImages";
 let workerPool: WorkerPool | undefined;
 export function registerFindPicturesCommand(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     "find-pictures.find-pictures",
     async () => {
-      console.log(1);
       workerPool = new WorkerPool(
         path.join(__dirname, "./workers/find-pictures-worker"),
         undefined,
@@ -20,7 +16,6 @@ export function registerFindPicturesCommand(context: vscode.ExtensionContext) {
           workerData: imageDimensionsMap,
         }
       );
-      console.log(2);
       try {
         // 1. 选择参考图片
         const referenceImage = await selectReferenceImage();
@@ -264,7 +259,6 @@ async function findSimilarImages(referencePath: string, imagePaths: string[]) {
   const config = vscode.workspace.getConfiguration("find-pictures");
   const similarity = config.get("similarity") as number;
   const similarImages: string[] = [];
-  console.log(similarImages, "1");
   // 显示进度通知
   await vscode.window.withProgress(
     {
@@ -281,7 +275,6 @@ async function findSimilarImages(referencePath: string, imagePaths: string[]) {
 
           arr.push(compareImages(currentPath, referencePath));
         }
-        console.log(similarImages, "5");
 
         const results = (await Promise.allSettled(arr)) as {
           status: string;
@@ -291,7 +284,6 @@ async function findSimilarImages(referencePath: string, imagePaths: string[]) {
           };
           reason?: any;
         }[];
-        console.log();
         results.forEach((result, i) => {
           imageDimensionsMap[imagePaths[i]] = result?.value
             ?.imageSize as string;
@@ -308,18 +300,14 @@ async function findSimilarImages(referencePath: string, imagePaths: string[]) {
 }
 
 async function compareImages(imagePath: string, referencePath: string) {
-  console.log(1);
   return new Promise(async (resolve, reject) => {
     try {
       const result = await workerPool!.execute({
         imagePath,
         referencePath,
       });
-      console.log(result, "看起来一个都没有执行成功");
       resolve(result);
     } catch (error) {
-      console.log(error, "看起来一个都没有执行失败");
-
       reject(error);
     }
   });

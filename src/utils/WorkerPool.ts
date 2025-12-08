@@ -7,11 +7,12 @@ export class WorkerPool {
 
   constructor(workerPath: string, poolSize = 10, options?: WorkerOptions) {
     // 初始化 Worker 池
-    console.log("没纸小");
     try {
       for (let i = 0; i < poolSize; i++) {
-        console.log("没有new Worker的感觉", workerPath);
         const worker = new Worker(workerPath, options);
+        worker.on("error", (err) => {
+          console.error("Worker运行时错误:", err.message);
+        });
         worker.on(
           "message",
           ({
@@ -58,7 +59,6 @@ export class WorkerPool {
         resolve,
         reject,
       });
-      console.log("有post吗？");
       worker.postMessage({
         workerId,
         data,

@@ -14,7 +14,6 @@ const extensionConfig = {
   entry: {
     extension: "./src/extension.ts",
     "workers/find-pictures-worker": "./src/workers/find-pictures-worker.ts",
-    "workers/image-worker": "./src/workers/image-worker.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -27,6 +26,9 @@ const extensionConfig = {
   },
   resolve: {
     extensions: [".ts", ".js"],
+  },
+  optimization: {
+    splitChunks: false, // 禁用代码分割，避免Worker引用extension的chunk
   },
   module: {
     rules: [

@@ -12,7 +12,8 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -25,7 +26,7 @@
         "title": "计算项目图片大小"
       },
       {
-        "command": "find-pictures.demoAsync",
+        "command": "find-pictures.filter-duplicate-images",
         "title": "筛选项目重复图片"
       }
     ],
@@ -56,7 +57,7 @@
           },
           "description": "排除目录(excludeDirs)",
           "default": [
-            "**/node_modules/"
+            "node_modules"
           ]
         }
       }

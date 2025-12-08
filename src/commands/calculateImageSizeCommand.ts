@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { calculateImageSize, scanWorkspaceImages } from "../utils";
-import { imageSizeMap } from "../extension";
+import { calculateImageSize } from "../utils/index";
+import { scanWorkspaceImages } from "../utils/scanWorkspaceImages";
 export function registerCalculateImageSizeCommand(
   context: vscode.ExtensionContext
 ) {
@@ -9,8 +9,7 @@ export function registerCalculateImageSizeCommand(
     async () => {
       try {
         const allImages = await scanWorkspaceImages();
-        const { totalSize, data } = await calculateImageSize(allImages);
-        for (let key in data) imageSizeMap[key] = data[key];
+        const { totalSize } = await calculateImageSize(allImages);
 
         vscode.window.showInformationMessage(
           `项目共有${allImages.length}张图片，大小为${totalSize}B = ${(
