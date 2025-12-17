@@ -13,9 +13,23 @@
     "Other"
   ],
   "activationEvents": [
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
+  "sideEffects": false,
   "contributes": {
+    "markdown": {
+      "files": [
+        {
+          "language": "en",
+          "path": "README.md"
+        },
+        {
+          "language": "zh-CN",
+          "path": "README.zh-CN.md"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "find-pictures.find-pictures",
@@ -61,6 +75,15 @@
           ]
         }
       }
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "find-pictures.find-pictures",
+          "when": "resourceExtname === .png || resourceExtname === .jpeg || resourceExtname === .jpg",
+          "group": "navigation"
+        }
+      ]
     }
   },
   "scripts": {
@@ -71,7 +94,6 @@
   "devDependencies": {
     "@types/node": "^20.19.11",
     "@types/vscode": "^1.0.0",
-    "canvas": "^3.2.0",
     "electron": "^34.5.8",
     "electron-rebuild": "^3.2.9",
     "ts-loader": "^9.5.2",
@@ -80,6 +102,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "image-js": "^0.37.0"
+    "image-js": "^0.37.0",
+    "image-size": "^2.0.2"
   }
 }

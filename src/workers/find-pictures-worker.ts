@@ -1,11 +1,10 @@
 import Image from "image-js";
 import { compareImageJS } from "../utils";
-import { WorkerBase } from "../utils/WorkerBase";
+import { WorkerBase } from "../utils";
 import { workerData } from "worker_threads";
 let imageDimensionsMap: { [key: string]: string } = workerData;
-console.log("多想要向过去告白");
 const PathImageMap = new Map<string, Image>();
-export class ImageWorker extends WorkerBase {
+export class FindPicturesWorker extends WorkerBase {
   protected async postMessage({
     imagePath,
     referencePath,
@@ -48,5 +47,4 @@ export class ImageWorker extends WorkerBase {
   }
 }
 
-// 初始化 worker
-new ImageWorker();
+new FindPicturesWorker();

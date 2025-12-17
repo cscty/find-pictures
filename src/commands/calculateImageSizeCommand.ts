@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { calculateImageSize } from "../utils/index";
-import { scanWorkspaceImages } from "../utils/scanWorkspaceImages";
+import { calculateImageSize } from "../utils";
+import { scanWorkspaceImages } from "../utils";
 export function registerCalculateImageSizeCommand(
   context: vscode.ExtensionContext
 ) {

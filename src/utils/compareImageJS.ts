@@ -13,19 +13,20 @@ export const compareImageJS = (img1: Image, img2: Image) => {
   let numDiffPixels = 0;
   const originWidth = img1.width;
   const originHeight = img2.height;
-  if (
-    img1.width >= CONFIG.TARGET_RESIZE_SIZE &&
-    img2.width >= CONFIG.TARGET_RESIZE_SIZE
-  ) {
-    img1 = img1.resize({
-      width: CONFIG.TARGET_RESIZE_SIZE,
-      height: CONFIG.TARGET_RESIZE_SIZE,
-    });
-    img2 = img2.resize({
-      width: CONFIG.TARGET_RESIZE_SIZE,
-      height: CONFIG.TARGET_RESIZE_SIZE,
-    });
-  }
+
+  // if (
+  //   img1.width >= CONFIG.TARGET_RESIZE_SIZE &&
+  //   img2.width >= CONFIG.TARGET_RESIZE_SIZE
+  // ) {
+  //   img1 = img1.resize({
+  //     width: CONFIG.TARGET_RESIZE_SIZE,
+  //     height: CONFIG.TARGET_RESIZE_SIZE,
+  //   });
+  //   img2 = img2.resize({
+  //     width: CONFIG.TARGET_RESIZE_SIZE,
+  //     height: CONFIG.TARGET_RESIZE_SIZE,
+  //   });
+  // }
 
   for (let i = 0; i < img1.width; i++) {
     for (let j = 0; j < img1.height; j++) {

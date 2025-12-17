@@ -1,9 +1,9 @@
 import { Worker, WorkerOptions } from "worker_threads";
-let id = 0;
+
 export class WorkerPool {
   private workers: Worker[] = [];
   private queue: ((value: void | PromiseLike<void>) => void)[] = [];
-  private map: Map<number, { resolve: any; reject: any }> = new Map();
+  private map: Map<Worker, { resolve: any; reject: any }> = new Map();
 
   constructor(workerPath: string, poolSize = 10, options?: WorkerOptions) {
     // 初始化 Worker 池
@@ -13,30 +13,19 @@ export class WorkerPool {
         worker.on("error", (err) => {
           console.error("Worker运行时错误:", err.message);
         });
-        worker.on(
-          "message",
-          ({
-            data,
-            error,
-            workerId,
-          }: {
-            data?: any;
-            error?: any;
-            workerId: number;
-          }) => {
-            if (error) {
-              this.map.get(workerId)?.reject(error);
-            } else {
-              this.map.get(workerId)?.resolve(data);
-            }
-            this.map.delete(workerId);
-            // 处理结果并释放 Worker
-            if (this.queue.length > 0) {
-              this.queue.shift()?.();
-            }
-            this.workers.push(worker);
+        worker.on("message", ({ data, error }: { data?: any; error?: any }) => {
+          if (error) {
+            this.map.get(worker)?.reject(error);
+          } else {
+            this.map.get(worker)?.resolve(data);
           }
-        );
+          this.map.delete(worker);
+          // 处理结果并释放 Worker
+          if (this.queue.length > 0) {
+            this.queue.shift()?.();
+          }
+          this.workers.push(worker);
+        });
 
         this.workers.push(worker);
       }
@@ -54,15 +43,24 @@ export class WorkerPool {
       }
 
       const worker = this.workers.pop()!;
-      const workerId = id++;
-      this.map.set(workerId, {
+      this.map.set(worker, {
         resolve,
         reject,
       });
       worker.postMessage({
-        workerId,
         data,
       });
+    });
+  }
+
+  clearWorker() {
+    this.workers.forEach((worker) => {
+      worker.removeAllListeners();
+      worker.terminate();
+    });
+
+    this.map.forEach(({ reject }) => {
+      reject("Worker 池已销毁");
     });
   }
 }

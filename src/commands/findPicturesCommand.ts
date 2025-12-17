@@ -2,13 +2,13 @@ import path from "path";
 import * as vscode from "vscode";
 import { WorkerPool } from "../utils";
 import { imageDimensionsMap } from "../extension";
-import { selectReferenceImage } from "../utils/selectReferenceImage";
-import { scanWorkspaceImages } from "../utils/scanWorkspaceImages";
+import { selectReferenceImage } from "../utils";
+import { scanWorkspaceImages } from "../utils";
 let workerPool: WorkerPool | undefined;
 export function registerFindPicturesCommand(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     "find-pictures.find-pictures",
-    async () => {
+    async (uri?: vscode.Uri) => {
       workerPool = new WorkerPool(
         path.join(__dirname, "./workers/find-pictures-worker"),
         undefined,
@@ -16,9 +16,10 @@ export function registerFindPicturesCommand(context: vscode.ExtensionContext) {
           workerData: imageDimensionsMap,
         }
       );
+
       try {
         // 1. 选择参考图片
-        const referenceImage = await selectReferenceImage();
+        const referenceImage = uri?.fsPath ?? (await selectReferenceImage());
         if (!referenceImage) return;
         // 2. 扫描工作区图片
         const allImages = await scanWorkspaceImages();
@@ -44,6 +45,8 @@ export function registerFindPicturesCommand(context: vscode.ExtensionContext) {
       } catch (error: any) {
         console.log(error);
         vscode.window.showErrorMessage(`操作失败: ${error.message}`);
+      } finally {
+        workerPool.clearWorker();
       }
     }
   );
@@ -194,6 +197,8 @@ async function showSimilarImages(similarImages: string[]) {
         </div>
 
         <script>
+  alert(11)
+
           const vscode = acquireVsCodeApi();
 
           // 图片加载错误处理
@@ -264,19 +269,14 @@ async function findSimilarImages(referencePath: string, imagePaths: string[]) {
     {
       location: vscode.ProgressLocation.Notification,
       title: "正在查找相似图片...",
-      cancellable: true,
     },
     async (progress, token) => {
       try {
-        const total = imagePaths.length;
-        let arr = [];
-        for (let i = 0; i < total; i++) {
-          const currentPath = imagePaths[i];
-
-          arr.push(compareImages(currentPath, referencePath));
+        const executeTasks = [];
+        for (let imagePath of imagePaths) {
+          executeTasks.push(compareImages(imagePath, referencePath));
         }
-
-        const results = (await Promise.allSettled(arr)) as {
+        const results = (await Promise.allSettled(executeTasks)) as {
           status: string;
           value?: {
             similarity: number;
