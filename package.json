@@ -1,13 +1,13 @@
 {
   "name": "find-pictures",
   "displayName": "find-pictures",
-  "description": "解决了项目中重复图片导致的性能问题",
+  "description": "A high-performance VS Code plugin to find similar/duplicate images in projects, optimize resource management, and reduce project size.",
   "publisher": "cscty",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "engines": {
     "vscode": "^1.0.0"
   },
-  "icon": "images/icon.png",
+  "icon": "images/icon.jpg",
   "repository": "https://github.com/cscty/find-pictures",
   "categories": [
     "Other"
