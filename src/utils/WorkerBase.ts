@@ -1,17 +1,16 @@
 import { parentPort } from "worker_threads";
-
 export abstract class WorkerBase {
   constructor() {
     this.setupMessageHandler();
   }
 
   private setupMessageHandler() {
-    parentPort!.on("message", async ({ data, workerId }) => {
+    parentPort!.on("message", async ({ data }) => {
       try {
         const result = await this.postMessage(data);
-        parentPort?.postMessage({ data: result, workerId });
+        parentPort?.postMessage({ data: result });
       } catch (error: any) {
-        parentPort?.postMessage({ error, workerId });
+        parentPort?.postMessage({ error });
       }
     });
   }

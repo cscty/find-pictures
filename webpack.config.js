@@ -1,32 +1,36 @@
-//@ts-check
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-"use strict";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const path = require("path");
-
-//@ts-check
-/** @typedef {import('webpack').Configuration} WebpackConfig **/
-
-/** @type WebpackConfig */
 const extensionConfig = {
-  target: "node", // VS Code extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
-  mode: "none", // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
   entry: {
     extension: "./src/extension.ts",
-    "workers/image-worker": "./src/workers/image-worker.ts",
+    "workers/find-pictures-worker": "./src/workers/find-pictures-worker.ts",
+    "workers/calculate-image-dimensions-worker":
+      "./src/workers/calculate-image-dimensions-worker.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].js",
     libraryTarget: "commonjs2",
   },
+
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
   externals: {
     vscode: "commonjs vscode",
     canvas: "commonjs canvas",
   },
-  resolve: {
-    extensions: [".ts", ".js"],
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+    libraryTarget: "commonjs2",
   },
+
   module: {
     rules: [
       {
@@ -40,9 +44,8 @@ const extensionConfig = {
       },
     ],
   },
-  devtool: "nosources-source-map",
-  infrastructureLogging: {
-    level: "log", // enables logging required for problem matchers
-  },
+  mode: "production",
+  target: "node",
 };
-module.exports = [extensionConfig];
+
+export default [extensionConfig];

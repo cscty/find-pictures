@@ -1,20 +1,35 @@
 {
   "name": "find-pictures",
   "displayName": "find-pictures",
-  "description": "解决了项目中重复图片导致的性能问题",
+  "description": "A high-performance VS Code plugin to find similar/duplicate images in projects, optimize resource management, and reduce project size.",
   "publisher": "cscty",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "engines": {
     "vscode": "^1.0.0"
   },
-  "icon": "images/icon.png",
+  "icon": "images/icon.jpg",
   "repository": "https://github.com/cscty/find-pictures",
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
+  "sideEffects": false,
   "contributes": {
+    "markdown": {
+      "files": [
+        {
+          "language": "en",
+          "path": "README.md"
+        },
+        {
+          "language": "zh-CN",
+          "path": "README.zh-CN.md"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "find-pictures.find-pictures",
@@ -23,6 +38,10 @@
       {
         "command": "find-pictures.calculate-image-size",
         "title": "计算项目图片大小"
+      },
+      {
+        "command": "find-pictures.filter-duplicate-images",
+        "title": "筛选项目重复图片"
       }
     ],
     "configuration": {
@@ -52,10 +71,19 @@
           },
           "description": "排除目录(excludeDirs)",
           "default": [
-            "**/node_modules/"
+            "node_modules"
           ]
         }
       }
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "find-pictures.find-pictures",
+          "when": "resourceExtname === .png || resourceExtname === .jpeg || resourceExtname === .jpg",
+          "group": "navigation"
+        }
+      ]
     }
   },
   "scripts": {
@@ -66,7 +94,6 @@
   "devDependencies": {
     "@types/node": "^20.19.11",
     "@types/vscode": "^1.0.0",
-    "canvas": "^3.2.0",
     "electron": "^34.5.8",
     "electron-rebuild": "^3.2.9",
     "ts-loader": "^9.5.2",
@@ -75,6 +102,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "image-js": "^0.37.0"
+    "image-js": "^0.37.0",
+    "image-size": "^2.0.2"
   }
 }

@@ -1,21 +1,86 @@
-### 这是一款查找项目相似图片的vscode插件
-`作用`
-- 解决我们往项目中添加重复图片的问题
-- 筛选出项目重复图片，为项目做个大瘦身（暂不支持，不久后支持）
-- 查看项目图片资源的大小以作出性能优化策略
+<div align="center"><a name="readme-top"></a>
 
-`优点`
-- 快！多线程计算图片是否相似
-- 准！按照像素相似百分比判断是否相似，用户可自行配置相似度
 
-`使用方法`
-### 功能一：查找相似图片
-1. `command + shift + p`
-2. 输入`find-pictures.find-pictures` 或 `查找相似图片`
-3. 选择一张本地图片
-4. 插件展示相似图片列表(鼠标点击图片自动复制)
 
-### 功能二：计算项目图片大小
-1. `command + shift + p`
-2. 输入`find-pictures.calculate-image-size` 或 `计算项目图片大小`
-3. 插件输出项目图片张数及大小
+
+![Banner](images/icon.jpg)
+# find-pictures
+
+
+A high-performance VS Code plugin to find similar/duplicate images in projects, optimize resource management, and reduce project size.
+
+🌐 English · [中文](./README.zh-CN.md)
+
+<div align="left"><a name="readme-top"></a>
+
+
+## ✨ Features
+
+
+
+* Solve the problem of adding duplicate images to projects
+
+* Filter duplicate images in projects to reduce project size
+
+* Check the size of project image resources for performance optimization strategies
+
+## 🚀 Key Advantages
+
+
+
+* **Fast**: Multi-threaded calculation for image similarity detection
+
+* **Accurate**: Judge similarity by pixel similarity percentage (configurable by users)
+
+## 📖 Usage Guide
+
+### Function 1: find-pictures
+
+#### Method 1:
+
+
+
+* Right-click an image in the file explorer → Select `查找相似图片`
+
+#### Method 2:
+
+
+
+1. Press `command + shift + p` (macOS) / `ctrl + shift + p` (Windows)
+
+2. Type `find-pictures.find-pictures` or `查找相似图片`
+
+3. Select a local image
+
+4. The plugin displays a list of similar images (Click the image to copy the path automatically)
+
+### Function 2: calculate-image-size
+
+
+
+1. Press `command + shift + p` (macOS) / `ctrl + shift + p` (Windows)
+
+2. Type `find-pictures.calculate-image-size` or `计算项目图片大小`
+
+3. The plugin outputs the total number and size of project images
+
+### Function 3: filter-duplicate-images
+
+
+
+1. Press `command + shift + p` (macOS) / `ctrl + shift + p` (Windows)
+
+2. Type `find-pictures.filter-duplicate-images` or `筛选重复图片`
+
+3. The plugin outputs a list of duplicate images in the project
+
+## 📞 Feedback
+
+
+
+* GitHub Issues: [Submit Feedback](https://github.com/cscty/find-pictures/issues)
+
+* Email: gdufcscty@163.com
+
+
+
